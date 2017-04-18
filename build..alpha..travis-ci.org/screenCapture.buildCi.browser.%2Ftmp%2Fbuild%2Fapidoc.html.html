@@ -1,4 +1,4 @@
-<div class="apidocDiv">
+<html><head></head><body><div class="apidocDiv">
 <style>
 /*csslint
 */
@@ -47,17 +47,10 @@
 }
 </style>
 <h1>api documentation for
-    <a
-
-        href="https://github.com/jackfranklin/gulp-load-plugins#readme"
-
-    >gulp-load-plugins (v1.5.0)</a>
+    <a href="https://github.com/jackfranklin/gulp-load-plugins#readme">gulp-load-plugins (v1.5.0)</a>
 </h1>
 <h4>Automatically load any gulp plugins in your package.json</h4>
-<div class="apidocSectionDiv"><a
-    href="#apidoc.tableOfContents"
-    id="apidoc.tableOfContents"
-><h1>table of contents</h1></a><ol>
+<div class="apidocSectionDiv"><a href="#apidoc.tableOfContents" id="apidoc.tableOfContents"><h1>table of contents</h1></a><ol>
 
     <li class="apidocModuleLi"><a href="#apidoc.module.gulp-load-plugins">module gulp-load-plugins</a><ol>
 
@@ -93,26 +86,26 @@
 
   var DEBUG = options.DEBUG || false;
   var pattern = getPattern(options);
-  var config = options.config || findup(&#x27;package.json&#x27;, { cwd: parentDir });
-  var scope = arrayify(options.scope || [&#x27;dependencies&#x27;, &#x27;devDependencies&#x27;, &#x27;peerDependencies&#x27;]);
+  var config = options.config || findup('package.json', { cwd: parentDir });
+  var scope = arrayify(options.scope || ['dependencies', 'devDependencies', 'peerDependencies']);
   var replaceString = options.replaceString || /^gulp(-|\.)/;
   var camelizePluginName = options.camelize !== false;
-  var lazy = &#x27;lazy&#x27; in options ? !!options.lazy : true;
+  var lazy = 'lazy' in options ? !!options.lazy : true;
   var renameObj = options.rename || {};
-  var maintainScope = &#x27;maintainScope&#x27; in options ? !!options.maintainScope : true;
+  var maintainScope = 'maintainScope' in options ? !!options.maintainScope : true;
 
-  logDebug(&#x27;Debug enabled with options: &#x27; + JSON.stringify(options));
+  logDebug('Debug enabled with options: ' + JSON.stringify(options));
 
   var renameFn = options.renameFn || function(name) {
-    name = name.replace(replaceString, &#x27;&#x27;);
+    name = name.replace(replaceString, '');
     return camelizePluginName ? camelize(name) : name;
   };
 
   var postRequireTransforms = options.postRequireTransforms || {};
 
-  if (typeof options.requireFn === &#x27;function&#x27;) {
+  if (typeof options.requireFn === 'function') {
     requireFn = options.requireFn;
-  } else if (typeof config === &#x27;string&#x27;) {
+  } else if (typeof config === 'string') {
     requireFn = function(name) {
       // This searches up from the specified package.json file, making sure
       // the config option behaves as expected. See issue #56.
@@ -123,49 +116,49 @@
     requireFn = require;
   }
 
-  configObject = (typeof config === &#x27;string&#x27;) ? require(config) : config;
+  configObject = (typeof config === 'string') ? require(config) : config;
 
   if (!configObject) {
-    throw new Error(&#x27;Could not find dependencies. Do you have a package.json file in your project?&#x27;);
+    throw new Error('Could not find dependencies. Do you have a package.json file in your project?');
   }
 
   var names = scope.reduce(function(result, prop) {
     return result.concat(Object.keys(configObject[prop] || {}));
   }, []);
 
-  logDebug(names.length + &#x27; plugin(s) found: &#x27; + names.join(&#x27; &#x27;));
+  logDebug(names.length + ' plugin(s) found: ' + names.join(' '));
 
-  pattern.push(&#x27;!gulp-load-plugins&#x27;);
+  pattern.push('!gulp-load-plugins');
 
   function logDebug(message) {
     if (DEBUG) {
-      logger(&#x27;gulp-load-plugins: &#x27; + message);
+      logger('gulp-load-plugins: ' + message);
     }
   }
 
   function defineProperty(object, transform, requireName, name, maintainScope) {
     var err;
     if (object[requireName]) {
-      logDebug(&#x27;error: defineProperty &#x27; + name);
+      logDebug('error: defineProperty ' + name);
       err = maintainScope ?
-        &#x27;Could not define the property &#x22;&#x27; + requireName + &#x27;&#x22;, you may have repeated dependencies in your package.json like&#x27; + &#x27; &#x22;
-gulp-&#x27; + requireName + &#x27;&#x22; and &#x27; + &#x27;&#x22;&#x27; + requireName + &#x27;&#x22;&#x27; :
-        &#x27;Could not define the property &#x22;&#x27; + requireName + &#x27;&#x22;, you may have repeated a dependency in another scope like&#x27; + &#x27; &#x22;gulp
--&#x27; + requireName + &#x27;&#x22; and &#x27; + &#x27;&#x22;@foo/gulp-&#x27; + requireName + &#x27;&#x22;&#x27;;
+        'Could not define the property "' + requireName + '", you may have repeated dependencies in your package.json like' + ' "
+gulp-' + requireName + '" and ' + '"' + requireName + '"' :
+        'Could not define the property "' + requireName + '", you may have repeated a dependency in another scope like' + ' "gulp
+-' + requireName + '" and ' + '"@foo/gulp-' + requireName + '"';
       throw new Error(err);
     }
 
     if (lazy) {
-      logDebug(&#x27;lazyload: adding property &#x27; + requireName);
+      logDebug('lazyload: adding property ' + requireName);
       Object.defineProperty(object, requireName, {
         enumerable: true,
         get: function() {
-          logDebug(&#x27;lazyload: requiring &#x27; + name + &#x27;...&#x27;);
+          logDebug('lazyload: requiring ' + name + '...');
           return transform(requireName, requireFn(name));
         }
       });
     } else {
-      logDebug(&#x27;requiring &#x27; + name + &#x27;...&#x27;);
+      logDebug('requiring ' + name + '...');
       object[requireName] = transform(requireName, requireFn(name));
     }
   }
@@ -179,7 +172,7 @@ gulp-&#x27; + requireName + &#x27;&#x22; and &#x27; + &#x27;&#x22;&#x27; + requi
       requireName = renameFn(name);
     }
 
-    logDebug(&#x27;renaming &#x27; + name + &#x27; to &#x27; + requireName);
+    logDebug('renaming ' + name + ' to ' + requireName);
 
     return requireName;
   }
@@ -187,17 +180,17 @@ gulp-&#x27; + requireName + &#x27;&#x22; and &#x27; + &#x27;&#x22;&#x27; + requi
   function applyTransform(requireName, plugin) {
     var transform = postRequireTransforms[requireName];
 
-    if (transform &#x26;&#x26; typeof transform === &#x27;function&#x27;) { // if postRequireTransform function is passed, pass it the plugin and return
+    if (transform &amp;&amp; typeof transform === 'function') { // if postRequireTransform function is passed, pass it the plugin and return
  it
-      logDebug(&#x27;transforming &#x27; + requireName);
+      logDebug('transforming ' + requireName);
       return transform(plugin);
     } else {
       return plugin; // if no postRequireTransform function passed, return the plugin as is
     }
   }
 
-  var scopeTest = new RegExp(&#x27;^@&#x27;);
-  var scopeDecomposition = new RegExp(&#x27;^@(.+)/(.+)&#x27;);
+  var scopeTest = new RegExp('^@');
+  var scopeDecomposition = new RegExp('^@(.+)/(.+)');
 
   unique(micromatch(names, pattern)).forEach(function(name) {
     var decomposition;
@@ -218,3 +211,4 @@ gulp-&#x27; + requireName + &#x27;&#x22; and &#x27; + &#x27;&#x22;&#x27; + requi
     ]
 </div>
 </div>
+</body></html>
